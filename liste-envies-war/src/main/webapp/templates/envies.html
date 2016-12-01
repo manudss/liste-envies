@@ -7,7 +7,7 @@
             </h1>
         </div>
     </div>
-    <div class="row row-fluid list-envie">
+    <div class="row row-fluid">
         <div class="loading" ng-if="vm.loading"> <div class='loader'>
             <div class='loader--dot'></div>
             <div class='loader--dot'></div>
@@ -17,10 +17,8 @@
             <div class='loader--dot'></div>
             <div class='loader--text'></div>
         </div></div>
-        <div id="envie{{envie.id}}"  ng-repeat="envie in vm.listeEnvies" >
-        <div data-ng-show="$index % 3 == 0" class="envie-separator"></div>
-        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" >
-            <div class="panel envie-item"  ng-class="{'panel-danger':envie.userTake, 'panel-success':!envie.userTake}">
+        <div class="columns list-envie">
+            <div class="panel envie-item"  ng-class="{'panel-danger':envie.userTake, 'panel-success':!envie.userTake}"id="envie{{envie.id}}"  ng-repeat="envie in vm.listeEnvies">
                 <div class="panel-heading">
                     <span class="badge pull-right">{{envie.price}}</span>
                     <h1>{{envie.label}}</h1>
@@ -108,8 +106,6 @@
             </div>
 
         </div>
-
-    </div>
     </div>
 
     <form ng-if="main.user.email == vm.email" id="formEdit">
