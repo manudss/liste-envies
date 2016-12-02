@@ -9,9 +9,12 @@
 
 }
 .columns {
-    column-count: 4;
-    column-width: 400px;
-    column-gap: 10px;
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+    -webkit-column-gap: 2rem;
+    -moz-column-gap: 2rem;
+    column-gap: 2rem;
     width: 90%;
     margin: 25px auto;
 }
@@ -25,11 +28,10 @@
 }
 
 .envie-item {
-    column-break-inside: avoid;
-    -webkit-column-break-after: avoid;
-    break-inside: avoid-column;
     display: inline-block;
+    width: 100%;
     position: relative;
+    margin-bottom: 2rem;
 }
 
 .list-envie .envie-item .panel-body {
