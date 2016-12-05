@@ -59,8 +59,25 @@
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal --><!--row row-fluid-->
-    <div class=" list-envie" masonry='{ "transitionDuration" : "0.4s" , "itemSelector" : ".envie-card", percentPosition: true }'>
+    </div><!-- /.modal -->
+    <div>
+        <div class="btn-group" opt-kind="" ok-key="filter">
+            <button type="button" class="btn btn-default active" ok-sel="*">Show All</button>
+            <button type="button" class="btn btn-default" ok-sel=".panel-warning">Offert</button>
+            <button type="button" class="btn btn-default" ok-sel=".panel-success">A offrir</button>
+            <button type="button" class="btn btn-default" ok-sel=".panel-info">Suggestion</button>
+            <button type="button" class="btn btn-default" ok-sel=":not(.panel-warning)">Non Offert</button>
+        </div>
+        <h4>Selector and Value-Based Sort</h4>
+        <div class="btn-group" opt-kind="" ok-key="sortBy">
+            <button type="button" class="btn btn-default" ok-sel=".name">Name</button>
+            <button type="button" class="btn btn-default active" ok-sel="[number]" ok-type="integer">Number</button>
+            <button type="button" class="btn btn-default" ok-sel="[date]" ok-type="integer">Date</button>
+        </div>
+    </div>
+
+    <!--row row-fluid-->
+    <div class=" list-envie" isotope-container="" >
         <div class="loading" ng-if="vm.loading">
             <div class='loader'>
                 <div class='loader--dot'></div>
@@ -72,10 +89,9 @@
                 <div class='loader--text'></div>
             </div>
         </div>
-        <div id="envie{{envie.id}}" masonry-tile class="envie-card" ng-repeat="envie in vm.envies" >
-            <!--<div data-ng-show="$index % 3 == 0" class="envie-separator"></div>-->
-            <div >
-                <div class="panel envie-item"  ng-class="{'panel-danger':envie.userTakeUsers, 'panel-info':envie.suggest, 'panel-success':!envie.userTakeUsers}">
+        <div id="envie{{envie.id}}" isotope-item="" ng-repeat="envie in vm.envies" class="panel envie-item envie-card"  ng-class="{'panel-warning':envie.userTakeUsers, 'panel-info':envie.suggest, 'panel-success':!envie.userTakeUsers}">
+
+
                     <div class="panel-heading">
                         <span class="badge pull-right">{{envie.price}}</span>
                         <h1>{{envie.label}}</h1>
@@ -146,11 +162,10 @@
                         <!--<p></p><br>
                         <p><span class="label label-success">Tecnologia</span><span class="label label-warning">Programação</span><span class="label label-danger">Python</span><span class="label label-info">Dinâmica</span></p>-->
                     </div>
-                </div>
-            </div>
+
         </div>
         <!--<div data-ng-show="$index % 3 == 0" class="envie-separator"></div>-->
-        <div masonry-tile class="envie-card" >
+        <div class="envie-card" isotope-item="">
             <form id="formEdit">
                 <div class="panel envie-item"  ng-class="{'panel-danger':envie.userTake, 'panel-info':envie.suggest, 'panel-success':!envie.userTake}">
                     <div class="panel-heading">
