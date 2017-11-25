@@ -10,10 +10,10 @@ AuthService.$inject = ['$http'];
         
         obj.refresh = function() {
 	        $http.get('/user')
-		        .success(function(data) {
+		        .then(function(data) {
 		            obj.user = eval(data);
 		        })
-	        	.error(function(error) {
+	        	.catch(function(error) {
 	        		obj.user = null;
 	        	});
     	};
