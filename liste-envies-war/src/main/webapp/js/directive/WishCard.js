@@ -39,7 +39,6 @@ var WishCard = function ($scope, envieService) {
         w.add = true;
     };
     if (!w.wish.id) {
-
         resetAddForm();
     }
 
@@ -99,8 +98,6 @@ var WishCard = function ($scope, envieService) {
     };
 
     w.updateWish = function () {
-
-
         //w.parentController.addEnvie(w.wish);
         if (w.link) {
             w.addLink(w.link);
@@ -156,7 +153,6 @@ var WishCard = function ($scope, envieService) {
     };
 
     w.rateFunction = function(rating){
-
         if (!w.edit) {
             setTimeout(function (w) {
                 w.updateWish();
@@ -166,9 +162,11 @@ var WishCard = function ($scope, envieService) {
 
 
     w.given = function(id) {
-        envieService.give({name:w.listName, id:id}, {}, function(updatedData) {
-            w.parentController.updatePropertiesWish(w.wish, updatedData);
-        });
+        if (w.wish.userTake.indexOf(w.user.email) < 0) {
+            envieService.give({name:w.listName, id:id}, {}, function(updatedData) {
+                w.parentController.updatePropertiesWish(w.wish, updatedData);
+            });
+        }
     };
 
 

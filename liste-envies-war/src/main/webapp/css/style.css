@@ -278,8 +278,8 @@ div.material-icons.form-control-feedback {
     background: white;
 }
 
-.card.card-signup.envie-item.ng-scope {
-    margin-top: 20px;
+.envie-container {
+    padding-top: 20px;
 }
 
 .envie-card .panel {
@@ -288,6 +288,10 @@ div.material-icons.form-control-feedback {
 
 .envie-card .panel .footer {
     padding: 5px;
+}
+
+.envie-card h1 {
+    font-size: 1.5em;
 }
 
 .envie-card .gift {
@@ -636,7 +640,7 @@ div.material-icons.form-control-feedback {
 .star-rating {
     margin: 0;
     padding: 0;
-    display: inline-block;
+    display: flex;
 }
 .star-rating > .star, .star-rating > .cancel-rating {
     padding: 1px;
@@ -677,6 +681,23 @@ div.material-icons.form-control-feedback {
     z-index: 1 !important;
 }
 
+.notif-menu {
+    padding: 5px;
+    min-width: 250px;
+}
 
+li.notif {
+    color: #333;
+    border-bottom: 1px solid #e2e2e2;
+}
+
+li.notif .fa {
+    color: #666;
+    margin: 0 5px;
+}
+
+.dropdown-menu {
+    z-index: 2000 !important;
+}
 
 
