@@ -1,8 +1,10 @@
 package fr.desaintsteban.liste.envies.servlet;
 
+import com.google.api.client.util.ArrayMap;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.LoadResult;
 import com.googlecode.objectify.Objectify;
+import fr.desaintsteban.liste.envies.model.AppUser;
 import fr.desaintsteban.liste.envies.model.Wish;
 import fr.desaintsteban.liste.envies.model.deprecated.Envy;
 import fr.desaintsteban.liste.envies.model.deprecated.ListEnvies;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -29,12 +32,25 @@ public class MigrateServlet extends HttpServlet {
         resp.setContentType("text/plain;charset=UTF-8");
         PrintWriter out = resp.getWriter();
         Objectify ofy = OfyService.ofy();
+        List<AppUser> ListUsers = ofy.load().type(AppUser.class).list();
+
+        Map<String, AppUser> Users = new ArrayMap<String, AppUser>();
+
+        for (AppUser user : ListUsers) {
+            Users.put(user.getEmail(), user);
+        }
+
+
+
+
         List<ListEnvies> list = ofy.load().type(ListEnvies.class).list();
         List<WishList> listConverted = new ArrayList<>();
         List<Wish> ConvertedWish = new ArrayList<>();
 
         for (ListEnvies listEnvy : list) {
             WishList newWishList = new WishList();
+
+
 
             newWishList.setName(listEnvy.getName());
             newWishList.setTitle(listEnvy.getTitle());
@@ -48,7 +64,7 @@ public class MigrateServlet extends HttpServlet {
 
             for(Envy envy : Envies) {
                 Wish newWish = new Wish(newWishList, envy.getLabel());
-                newWish.setOwner(envy.getOwner());
+                newWish.setOwner(Users.get(envy.getOwner()));
                 newWish.setSuggest(envy.getSuggest());
                 newWish.setArchived(envy.getArchived());
                 newWish.setDeleted(envy.getDeleted());
@@ -58,12 +74,19 @@ public class MigrateServlet extends HttpServlet {
                 newWish.setDate(envy.getDate());
                 newWish.setUrls(envy.getUrls());
                 newWish.setRating(envy.getRating());
-                newWish.setUserTake(envy.getUserTake());
                 newWish.setUserReceived(envy.getUserReceived());
                 newWish.setNotes(envy.getNotes());
 
+                // set UserTake
+                List<String> userTake = envy.getUserTake();
 
+                if (!userTake.isEmpty()) {
+                    for (String ofuscedEmail : userTake) {
+                        String userTakeEmail = EncodeUtils.decode(ofuscedEmail);
 
+                        newWish.addUserTake(Users.get(userTakeEmail));
+                    }
+                }
                 ConvertedWish.add(newWish);
             }
 

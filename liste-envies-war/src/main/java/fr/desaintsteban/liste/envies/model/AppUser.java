@@ -22,7 +22,12 @@ public class AppUser {
 		this.name = name;
 		this.email = email;
 	}
-	
+
+	public AppUser(AppUserDto dto) {
+		this.name = dto.getName();
+		this.email = dto.getEmail();
+	}
+
 	public Key<AppUser> getKey() {
 		return Key.create(AppUser.class, email);
 	}

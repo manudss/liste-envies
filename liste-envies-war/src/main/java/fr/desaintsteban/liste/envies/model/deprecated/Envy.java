@@ -3,6 +3,7 @@ package fr.desaintsteban.liste.envies.model.deprecated;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.*;
 import com.googlecode.objectify.condition.IfNotNull;
+import fr.desaintsteban.liste.envies.dto.AppUserDto;
 import fr.desaintsteban.liste.envies.dto.WishDto;
 import fr.desaintsteban.liste.envies.dto.NoteDto;
 import fr.desaintsteban.liste.envies.model.Link;
@@ -83,7 +84,7 @@ public class Envy {
 
     public Envy(WishDto envie) {
         setId(envie.getId());
-        setOwner(envie.getOwner());
+        setOwner(envie.getOwner().getEmail());
         setSuggest(envie.getSuggest());
         setDeleted(envie.getDeleted());
         setLabel(envie.getLabel());
@@ -107,7 +108,7 @@ public class Envy {
     public WishDto toDto(boolean filter) {
         WishDto envie = new WishDto();
         envie.setId(getId());
-        envie.setOwner(getOwner());
+        envie.setOwner(new AppUserDto(getOwner(), getOwner()));
         envie.setSuggest(getSuggest());
         envie.setDeleted(getDeleted());
         envie.setLabel(getLabel());

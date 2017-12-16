@@ -13,7 +13,7 @@ import java.util.List;
 public class WishDto {
     private Long id;
 
-    private String owner;
+    private AppUserDto owner;
     private Boolean suggest = false;
     private Boolean deleted = false;
     private String label;
@@ -42,11 +42,11 @@ public class WishDto {
         this.id = id;
     }
 
-    public String getOwner() {
+    public AppUserDto getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(AppUserDto owner) {
         this.owner = owner;
     }
 

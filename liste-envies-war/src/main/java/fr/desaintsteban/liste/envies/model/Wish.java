@@ -3,6 +3,7 @@ package fr.desaintsteban.liste.envies.model;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.*;
 import com.googlecode.objectify.condition.IfNotNull;
+import fr.desaintsteban.liste.envies.dto.AppUserDto;
 import fr.desaintsteban.liste.envies.dto.WishDto;
 import fr.desaintsteban.liste.envies.dto.NoteDto;
 import fr.desaintsteban.liste.envies.util.EncodeUtils;
@@ -29,7 +30,8 @@ public class Wish {
     @Id
     private Long id;
 
-    private String owner;
+    @Embedded
+    private AppUser owner;
     /**
      * L'envie à été suggéré par une autre personne
      */
@@ -48,7 +50,8 @@ public class Wish {
     private String description;
 
     private String price;
-    private String picture;
+
+    private List<String> pictures = new ArrayList<>();
     private Date date;
 
 
@@ -58,6 +61,10 @@ public class Wish {
     private List<Link> urls;
     @Index
     private List<String> userTake;
+
+    @Embedded
+    private List<WishGiven> given = new ArrayList<>();
+
     @Index(IfNotNull.class)
     private List<String> userReceived;
 
@@ -80,7 +87,7 @@ public class Wish {
 
     public Wish(WishDto wish) {
         setId(wish.getId());
-        setOwner(wish.getOwner());
+        if (wish.getOwner() != null) { setOwner(new AppUser(wish.getOwner())); }
         setSuggest(wish.getSuggest());
         setDeleted(wish.getDeleted());
         setLabel(wish.getLabel());
@@ -104,7 +111,7 @@ public class Wish {
     public WishDto toDto(boolean filter) {
         WishDto wish = new WishDto();
         wish.setId(getId());
-        wish.setOwner(getOwner());
+        wish.setOwner(getOwnerDto());
         wish.setSuggest(getSuggest());
         wish.setDeleted(getDeleted());
         wish.setLabel(getLabel());
@@ -147,11 +154,11 @@ public class Wish {
         this.id = id;
     }
 
-    public String getOwner() {
+    public AppUser getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(AppUser owner) {
         this.owner = owner;
     }
 
@@ -204,11 +211,19 @@ public class Wish {
     }
 
     public String getPicture() {
-        return picture;
+        return (!pictures.isEmpty())? pictures.get(0) : "";
     }
 
     public void setPicture(String picture) {
-        this.picture = picture;
+        this.pictures.add(picture);
+    }
+
+    public List<String> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<String> pictures) {
+        this.pictures = pictures;
     }
 
     public Date getDate() {
@@ -261,13 +276,32 @@ public class Wish {
             this.userTake = new ArrayList<>();
         }
         if (!StringUtils.isNullOrEmpty(userTake)) {
-            this.userTake.add(userTake);
+            this.userTake.add(EncodeUtils.encode(userTake));
         }
     }
 
     public void removeUserTake(String userTake) {
         if (userTake != null) {
-            this.userTake.remove(userTake);
+            this.userTake.remove(EncodeUtils.encode(userTake));
+        }
+    }
+
+    public void addUserTake(AppUser userTake) {
+        if (this.userTake == null) {
+            this.userTake = new ArrayList<>();
+        }
+        if (!StringUtils.isNullOrEmpty(userTake.getEmail())) {
+            this.userTake.add(EncodeUtils.encode(userTake.getEmail()));
+            WishGiven wishGiven = new WishGiven(userTake);
+            this.given.add(wishGiven);
+        }
+    }
+
+    public void removeUserTake(AppUser userTake) {
+        if (userTake != null) {
+            this.userTake.remove(EncodeUtils.encode(userTake.getEmail()));
+
+            this.given.removeIf(s -> s.getEmail().equals(userTake.getEmail()));
         }
     }
 
@@ -289,5 +323,17 @@ public class Wish {
 
     public void setNotes(List<Note> notes) {
         this.notes = notes;
+    }
+
+    public List<WishGiven> getGiven() {
+        return given;
+    }
+
+    public void setGiven(List<WishGiven> given) {
+        this.given = given;
+    }
+
+    public AppUserDto getOwnerDto() {
+        return owner.toDto();
     }
 }

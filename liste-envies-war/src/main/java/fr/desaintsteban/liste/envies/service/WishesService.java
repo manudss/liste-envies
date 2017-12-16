@@ -63,7 +63,7 @@ public final class WishesService {
             public void vrun() {
                 Objectify ofy = OfyService.ofy();
                 Wish saved = ofy.load().key(Key.create(parent, Wish.class, itemid)).now();
-                if (saved.hasUserTaken() && wishList.containsOwner(saved.getOwner())) {
+                if (saved.hasUserTaken() && wishList.containsOwner(saved.getOwner().getEmail())) {
                     Saver saver = ofy.save();
                     saved.setDeleted(true);
                     saver.entity(saved);
@@ -126,7 +126,7 @@ public final class WishesService {
                     Objectify ofy = OfyService.ofy();
                     Wish saved = ofy.load().key(Key.create(parent, Wish.class, itemId)).now();
                     Saver saver = ofy.save();
-                    saved.addUserTake(EncodeUtils.encode(user.getEmail()));
+                    saved.addUserTake(user);
                     saver.entity(saved);
                     NotificationsService.notify(NotificationType.GIVEN_WISH, user, wishList, true, saved.getLabel());
                     return saved.toDto();
@@ -184,7 +184,7 @@ public final class WishesService {
             Objectify ofy1 = OfyService.ofy();
             Wish saved = ofy1.load().key(Key.create(parent, Wish.class, itemId)).now();
             Saver saver = ofy1.save();
-            saved.removeUserTake(EncodeUtils.encode(user.getEmail()));
+            saved.removeUserTake(user.getEmail());
             saver.entity(saved);
                 return saved.toDto();
             });
@@ -217,9 +217,9 @@ public final class WishesService {
                 add = false;
             }
             if (item.getOwner() == null) {
-                item.setOwner(user.getEmail());
+                item.setOwner(user);
             }
-            boolean containsOwner = wishList.containsOwner(item.getOwner());
+            boolean containsOwner = wishList.containsOwner(item.getOwner().getEmail());
             item.setSuggest(!containsOwner);
             item.setDate(new Date());
             Key<Wish> key = saver.entity(item).now();
