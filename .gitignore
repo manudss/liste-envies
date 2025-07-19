@@ -19,3 +19,4 @@ liste-envies-war/.classpath
 .project
 .classpath
 .settings
+.env
